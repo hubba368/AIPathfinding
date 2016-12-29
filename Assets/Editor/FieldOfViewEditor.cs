@@ -22,6 +22,11 @@ public class FieldOfViewEditor : Editor
         Handles.color = Color.red;
         foreach (Transform visibleTarget in fow.visibleTargets)
         {
+            if(visibleTarget == null)
+            {
+                //if more than one human - needed in case a tree is removed by another human
+                return;
+            }
             Handles.DrawLine(fow.transform.position, visibleTarget.position);
         }
     }
