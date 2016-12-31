@@ -4,24 +4,32 @@ using System.Collections;
 public class Controller : MonoBehaviour
 {
 
-	public float moveSpeed = 6;
 
-	Rigidbody myRigidbody;
 
-	Vector3 velocity;
+    Camera mainCam;
 
-	void Start ()
-    {
-		myRigidbody = GetComponent<Rigidbody> ();
-	}
+    float speed = 6;
 
+    //Camera Controls
 	void Update ()
     {
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.position -= new Vector3(0, 0, speed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.position += new Vector3(0, 0, speed * Time.deltaTime);
+        }
 
-	}
+    }
 
-	void FixedUpdate()
-    {
-		myRigidbody.MovePosition (myRigidbody.position + velocity * Time.fixedDeltaTime);
-	}
 }

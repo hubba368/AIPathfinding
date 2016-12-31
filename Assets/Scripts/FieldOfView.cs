@@ -16,12 +16,6 @@ public class FieldOfView : MonoBehaviour
     public List<Transform> visibleTargets = new List<Transform>();  //list of visible targets
 
     public float speed = 1f; //speed of actor
-
-    public float wanderTimer;
-    public float timer;
-
-    public NavMeshAgent agent;
-   // public float hitRange = 1f;
     
 
 
@@ -102,14 +96,15 @@ public class FieldOfView : MonoBehaviour
             {
                 if (obj == null)
                 {
-                    //small check incase a tree is destroyed by another human
+                    //small check incase target is destroyed before character reaches it
                     return;
                 }
+
                 float nextObj = Vector3.Distance(obj.transform.position, transform.position);
                 float closestObj = Vector3.Distance(closest.transform.position, transform.position);
 
                 //if the new target is closer than the first target, move to it
-                if (nextObj < closestObj)
+                if (nextObj < closestObj && obj.gameObject.layer != 11)
                 {
                     tgt = obj.transform.position;
                     transform.position = Vector3.MoveTowards(transform.position, tgt, speed);
@@ -121,11 +116,18 @@ public class FieldOfView : MonoBehaviour
                     transform.position = Vector3.MoveTowards(transform.position, tgt, speed);
                 }
 
-                if (nextObj == closestObj)
+                if (nextObj == closestObj && obj.gameObject.layer != 11)
                 {
                     // if the distances are the same, go to the target that was seen first
                     tgt = closest.transform.position;
                     transform.position = Vector3.MoveTowards(transform.position, tgt, speed);
+                }
+
+                if(obj.gameObject.layer == 11)
+                {
+                    //VERY TEMPORARY FLEEING
+                    Vector3 fleeDir = obj.position - transform.position;
+                    transform.position *= -1;
                 }
             }
         }
@@ -138,8 +140,9 @@ public class FieldOfView : MonoBehaviour
 
     void NewDirection()
     {
-        //find a random point
+        //find a random point using insideUnitSphere
         Vector3 offset = Random.insideUnitSphere * 500f;
+        offset.y = 0.0f;
         randomWayPoint = transform.position + offset;
     }
 
@@ -152,6 +155,22 @@ public class FieldOfView : MonoBehaviour
         {
             Destroy(coll.gameObject);
             visibleTargets.Remove(coll.transform);  //forgot to remove destroyed object from list lol
+        }
+
+        //if orc collides with human
+        if(coll.gameObject.layer == 10)
+        {
+            if(this.gameObject.layer == 10)
+            {
+                //if human collides with human
+                return;
+            }
+            else if(this.gameObject.layer == 11)
+            {
+                //if orc collides with human
+                Destroy(coll.gameObject);
+                
+            }
         }
     }
 
