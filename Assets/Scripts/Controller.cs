@@ -9,27 +9,33 @@ public class Controller : MonoBehaviour
     Camera mainCam;
 
     float speed = 6;
+   // float zoomSpeed = 3;
+    
+    int scrollDist = 5;
+    float scrollSpeed = 10;
 
     //Camera Controls
-	void Update ()
+    void Update ()
     {
-        if (Input.GetKey(KeyCode.RightArrow))
+        float mousePosX = Input.mousePosition.x;
+        float mousePosY = Input.mousePosition.y;
+        //RTS style camera movement
+        if (mousePosX < scrollDist)
         {
-            transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+            transform.Translate(Vector3.right * -scrollSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        else if(mousePosX >= Screen.width - scrollDist)
         {
-            transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
+            transform.Translate(Vector3.right * scrollSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        else if(mousePosY < scrollDist)
         {
-            transform.position -= new Vector3(0, 0, speed * Time.deltaTime);
+            transform.Translate(Vector3.forward * -scrollSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.UpArrow))
+        else if (mousePosY >= Screen.height - scrollDist)
         {
-            transform.position += new Vector3(0, 0, speed * Time.deltaTime);
+            transform.Translate(Vector3.forward * scrollSpeed * Time.deltaTime);
         }
-
     }
 
 }

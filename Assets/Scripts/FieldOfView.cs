@@ -125,17 +125,16 @@ public class FieldOfView : MonoBehaviour
 
                 if(obj.gameObject.layer == 11)
                 {
-                    //VERY TEMPORARY FLEEING
-                    Vector3 fleeDir = obj.position - transform.position;
-                    transform.position *= -1;
+                  //  Flee();
                 }
             }
         }
+     
         else if (visibleTargets.Count == 0)
         {
             //if no targets, wander forever
             transform.position = Vector3.MoveTowards(transform.position, randomWayPoint, speed);
-        }         
+        }                
     }
 
     void NewDirection()
@@ -144,6 +143,11 @@ public class FieldOfView : MonoBehaviour
         Vector3 offset = Random.insideUnitSphere * 500f;
         offset.y = 0.0f;
         randomWayPoint = transform.position + offset;
+    }
+
+    void Flee()
+    {
+
     }
 
 
