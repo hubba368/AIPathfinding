@@ -6,14 +6,16 @@ public class CreateWorld : MonoBehaviour
     public Vector3 spawnPoint;
     public Quaternion rotation;
 
-    public GameObject[] actors;
-    public int maxActors = 30;  //max amount that can be spawned
+    public GameObject[] actors; //array of actors to allow for diff models to be generated
+    public int maxActors;  //max amount that can be spawned
+    public float spawnSpeed; //diff speeds of generation for each spawner gameObject
 
+    public bool isComplete = false;
 
     Vector3 GetRandomSpawnPoint()
     {
         //Generate a random spawn point by using insideUnitSphere
-        Vector3 spawnRadius = Random.insideUnitSphere * 75f;
+        Vector3 spawnRadius = Random.insideUnitSphere * 74f;
         spawnRadius.y = 0.0f;
 
         spawnPoint = spawnRadius + transform.position;
@@ -21,11 +23,11 @@ public class CreateWorld : MonoBehaviour
         return spawnPoint;
     }
 
-    void SpawnObject()
+    IEnumerator SpawnObject()
     {
         //Spawn objects that are set in the inspector
         int spawned = 0;
-        
+       
 
         float direction = Random.Range(0f, 360f);
 
@@ -35,13 +37,18 @@ public class CreateWorld : MonoBehaviour
             int prefab = Random.Range(0, 3);
             Instantiate(actors[prefab], GetRandomSpawnPoint(), Quaternion.Euler(new Vector3(0f, direction, 0f)));
             spawned++;
-        }  
+            yield return new WaitForSeconds(spawnSpeed);
+        }
+
+        if(spawned == maxActors)
+        {
+            isComplete = true;
+        }
     }
 
     void Start()
-    {
-        
-        SpawnObject();
+    {      
+        StartCoroutine(SpawnObject());
     }
 	
 }

@@ -9,8 +9,8 @@ public class Controller : MonoBehaviour
     float speed = 15f;
     float rotateY = 0f;   
     float scrollSpeed = 10f;
-
-
+    
+    
 
     //Camera Controls
     void KeyboardInput()
@@ -19,7 +19,7 @@ public class Controller : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             //left
-            transform.Translate(Vector3.right * -scrollSpeed * Time.deltaTime);
+            transform.Translate(Vector3.left * scrollSpeed * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.D))
         {
@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour
         else if (Input.GetKey(KeyCode.S))
         {
             //down
-            transform.Translate(Vector3.forward * -scrollSpeed * Time.deltaTime);
+            transform.Translate(Vector3.back * scrollSpeed * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.W))
         {
@@ -42,7 +42,10 @@ public class Controller : MonoBehaviour
     void MouseControl()
     {
         //Controls view of camera in first person
-        if(axes == RotationAxes.MouseXandY)
+
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (axes == RotationAxes.MouseXandY)
         {
             //if both axes are being moved/rotated
             float rotateX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * speed;   //rotate X axis
@@ -65,6 +68,9 @@ public class Controller : MonoBehaviour
 
             transform.localEulerAngles = new Vector3(-rotateY, transform.localEulerAngles.y, 0);
         }
+
+        //camera zooming
+        transform.Translate(0, scroll * scrollSpeed, scroll * scrollSpeed, Space.World);
     }
 
 
