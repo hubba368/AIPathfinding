@@ -5,10 +5,10 @@ using UnityEditor;
 [CustomEditor(typeof(FieldOfView))]
 public class FieldOfViewEditor : Editor
 {
-    //used to see field of view in scene editor
+    //used to see field of view in scene view
     void OnSceneGUI()
     {
-        //generate view radius and view angles
+        //generate view radius and view angles in scene view
         FieldOfView fow = (FieldOfView)target;
         Handles.color = Color.white;
         Handles.DrawWireArc(fow.transform.position, Vector3.up, Vector3.forward, 360, fow.viewRadius);

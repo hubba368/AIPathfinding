@@ -36,14 +36,11 @@ public class Controller : MonoBehaviour
             //up
             transform.Translate(Vector3.forward * scrollSpeed * Time.deltaTime);
         }
-
     }
 
     void MouseControl()
     {
-        //Controls view of camera in first person
-
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        //Controls view of camera in first person    
 
         if (axes == RotationAxes.MouseXandY)
         {
@@ -69,8 +66,12 @@ public class Controller : MonoBehaviour
             transform.localEulerAngles = new Vector3(-rotateY, transform.localEulerAngles.y, 0);
         }
 
-        //camera zooming
-        transform.Translate(0, scroll * scrollSpeed, scroll * scrollSpeed, Space.World);
+        //camera zooming - Not needed due to FPS camera control
+      /*  float scroll = Input.GetAxis("Mouse ScrollWheel");
+        float camDist = 10f;
+
+        camDist += scroll * scrollSpeed;
+        camDist = Mathf.Clamp(camDist, 5f, 20f);*/
     }
 
 

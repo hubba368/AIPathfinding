@@ -8,7 +8,9 @@ public class CreateActors : MonoBehaviour
     public Quaternion rotation;
 
     public GameObject[] actors;
-    public int maxActors;  //max amount that can be spawned
+
+    public int maxActors = 4;  //max amount that can be spawned
+    public float spawnSpeed;
 
 
 
@@ -16,7 +18,7 @@ public class CreateActors : MonoBehaviour
     {
         //Generate a random spawn point by using insideUnitSphere
         Vector3 spawnRadius = Random.insideUnitSphere * 74f;
-        spawnRadius.y = 1.0f;
+        spawnRadius.y = 1.0f;   //have actor y value at 1f to stop clipping and subsequent falling through terrain on spawn
 
         spawnPoint = spawnRadius + transform.position;
 
@@ -29,25 +31,26 @@ public class CreateActors : MonoBehaviour
         int spawned = 0;
         float direction = Random.Range(0f, 360f);
 
-        GameObject check = GameObject.Find("TreeSpawner");
-        CreateWorld checkIfComplete = check.GetComponent<CreateWorld>();
-        if (checkIfComplete.isComplete == true)
+      //  GameObject check = GameObject.Find("TreeSpawner");
+      //  CreateWorld checkIfComplete = check.GetComponent<CreateWorld>();
+
+        //Tried making it so actors would spawn when all plants were spawned.
+        //Could get it to work but only if the coroutine was started in an update method,
+        //which would cause a large amount of actors to be spawned.
+        while (spawned < maxActors)
         {
-            while (spawned < maxActors)
-            {
-                //spawn until limit reached
-                int prefab = Random.Range(0, 3);
-                Instantiate(actors[prefab], GetRandomSpawnPoint(), 
-                    Quaternion.Euler(new Vector3(0f, direction, 0f)));
-                spawned++;
+            //spawn until limit reached
+            int prefab = Random.Range(0, 3);
+            Instantiate(actors[prefab], GetRandomSpawnPoint(),
+                Quaternion.Euler(new Vector3(0f, direction, 0f)));
+            spawned++;
 
-                yield return new WaitForSeconds(0.5f);
-            }
-            checkIfComplete.isComplete = false;
+            yield return new WaitForSeconds(spawnSpeed);
+
         }
-    }
+   }
 
-    void Update()
+    void Start()
     {
         StartCoroutine(SpawnObject());   
     }

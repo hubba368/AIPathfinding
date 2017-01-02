@@ -123,9 +123,12 @@ public class FieldOfView : MonoBehaviour
                     transform.position = Vector3.MoveTowards(transform.position, tgt, speed);
                 }
 
-                if(obj.gameObject.layer == 11)
+                if(obj.gameObject.layer == 11 && gameObject.layer == 10)
                 {
-                  //  Flee();
+                    //if human spots enemy - flee
+                    Vector3 fleeDir = transform.position - obj.transform.position;  //get distance of enemy 
+
+                    transform.Translate(fleeDir * (speed / 2.0f)); //move to the flee position
                 }
             }
         }
@@ -145,12 +148,6 @@ public class FieldOfView : MonoBehaviour
         randomWayPoint = transform.position + offset;
     }
 
-    void Flee()
-    {
-
-    }
-
-
 
     void OnCollisionEnter(Collision coll)
     {
@@ -164,12 +161,12 @@ public class FieldOfView : MonoBehaviour
         //if orc collides with human
         if(coll.gameObject.layer == 10)
         {
-            if(this.gameObject.layer == 10)
+            if(gameObject.layer == 10)
             {
                 //if human collides with human
                 return;
             }
-            else if(this.gameObject.layer == 11)
+            else if(gameObject.layer == 11)
             {
                 //if orc collides with human
                 Destroy(coll.gameObject);
@@ -181,6 +178,7 @@ public class FieldOfView : MonoBehaviour
 
     public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
     {
+        //Generates the field of view angles for each spawned actor - can only be seen in scene view
         if (!angleIsGlobal)
         {
             angleInDegrees += transform.eulerAngles.y;

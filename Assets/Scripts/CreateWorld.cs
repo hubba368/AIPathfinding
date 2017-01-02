@@ -27,21 +27,21 @@ public class CreateWorld : MonoBehaviour
     {
         //Spawn objects that are set in the inspector
         int spawned = 0;
-       
-
-        float direction = Random.Range(0f, 360f);
+        float direction = Random.Range(0f, 360f);  //get a random object rotation
 
         while(spawned < maxActors)
         {
             //spawn until limit reached
             int prefab = Random.Range(0, 3);
-            Instantiate(actors[prefab], GetRandomSpawnPoint(), Quaternion.Euler(new Vector3(0f, direction, 0f)));
+            Instantiate(actors[prefab], GetRandomSpawnPoint(), 
+                Quaternion.Euler(new Vector3(0f, direction, 0f)));
             spawned++;
             yield return new WaitForSeconds(spawnSpeed);
         }
 
         if(spawned == maxActors)
         {
+            //not implemented - would cause actors to be spawned 
             isComplete = true;
         }
     }
